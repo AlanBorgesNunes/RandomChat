@@ -11,17 +11,21 @@ import com.app.randomchat.R
 import com.app.randomchat.databinding.FragmentLoginBinding
 import com.app.randomchat.utils.*
 import com.app.randomchat.viewmodels.AuthViewModel
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
-    private lateinit var binding: FragmentLoginBinding
+    private  var _binding: FragmentLoginBinding? = null
+    private var user = FirebaseAuth.getInstance().currentUser
+
+    private val binding get() = _binding!!
     private val authViewModel: AuthViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentLoginBinding.inflate(layoutInflater).apply {
+        _binding = FragmentLoginBinding.inflate(layoutInflater).apply {
             viewLifecycleOwner
         }
         return binding.root
@@ -31,6 +35,7 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observer()
         toRegister()
+        observador()
         binding.btnLogin.setOnClickListener {
             if (validation()){
                 authViewModel.login(
@@ -71,17 +76,20 @@ class LoginFragment : Fragment() {
         authViewModel.login.observe(viewLifecycleOwner){state->
             when(state){
                 UiState.Loading -> {
-                    binding.btnLogin.text = "Loading..."
-                    binding.progressLogin.show()
+                    binding.tvLogin.text = ""
+                    binding.loginProgress.show()
                 }
                 is UiState.Success -> {
-                    binding.btnLogin.text = "Login"
-                    binding.progressLogin.hide()
+                    binding.tvLogin.text = "Login"
+                    binding.loginProgress.hide()
                     toast("Sucess login!")
+                    findNavController().navigate(
+                        R.id.action_loginFragment_to_geralActivity
+                    )
                 }
                 is UiState.Failure -> {
-                    binding.btnLogin.text = "Login"
-                    binding.progressLogin.hide()
+                    binding.tvLogin.text = "Login"
+                    binding.loginProgress.hide()
                     toast(state.error)
                 }
 
@@ -95,6 +103,21 @@ class LoginFragment : Fragment() {
                 R.id.action_loginFragment_to_registerFragment
             )
         }
+    }
+
+    private fun observador(){
+        authViewModel.getSession {
+            if (it != null){
+                findNavController().navigate(
+                    R.id.action_loginFragment_to_geralActivity
+                )
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

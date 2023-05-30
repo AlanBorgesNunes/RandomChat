@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 
@@ -61,6 +62,7 @@ class AuthRepositoryImp(
     }
 
     override fun updateUserInfo(user: User, result: (UiState<String>) -> Unit) {
+
         val document = database.collection(FireStoreCollection.USER).document(FirebaseAuth.getInstance().uid!!)
         document
             .set(user)
@@ -76,6 +78,7 @@ class AuthRepositoryImp(
                     )
                 )
             }
+
     }
 
     override fun loginUser(email: String, password: String, result: (UiState<String>) -> Unit) {

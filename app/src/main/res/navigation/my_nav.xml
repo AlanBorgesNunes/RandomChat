@@ -13,16 +13,27 @@
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_geralActivity"
+            app:destination="@id/geralActivity" />
     </fragment>
 
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.app.randomchat.ui.RegisterFragment"
-        android:label="RegisterFragment" >
+        android:label="RegisterFragment"
+        tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_geralActivity"
+            app:destination="@id/geralActivity" />
     </fragment>
+    <activity
+        android:id="@+id/geralActivity"
+        android:name="com.app.randomchat.GeralActivity"
+        android:label="app_bar_geral2"
+        tools:layout="@layout/app_bar_geral2" />
 
 </navigation>
-

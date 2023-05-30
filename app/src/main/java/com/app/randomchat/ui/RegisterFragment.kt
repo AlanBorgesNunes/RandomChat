@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.app.randomchat.R
 import com.app.randomchat.databinding.FragmentRegisterBinding
 import com.app.randomchat.model.User
 import com.app.randomchat.utils.*
@@ -42,28 +44,30 @@ class RegisterFragment : Fragment() {
     }
 
     private fun getUserObj(): User{
+        var genero  = String()
+        if (binding.checkHomem.isChecked){
+            genero = binding.checkHomem.text.toString()
+            binding.checkMulher.hide()
+        }
+        if (binding.checkMulher.isChecked){
+            genero = binding.checkMulher.text.toString()
+            binding.checkHomem.hide()
+        }
         return User(
-            nome = binding.edtNome.text.toString(),
+            nome = "Anonimo",
             email = binding.edtEmail.text.toString(),
             password = binding.edtPassword.text.toString(),
-            id = FirebaseAuth.getInstance().uid
+            id = FirebaseAuth.getInstance().uid,
+            genero = genero,
+            idade = "18"
         )
     }
 
     private fun validation(): Boolean{
         var isValid = true
-        if (binding.edtNome.text.toString().isNullOrEmpty()){
+        if(binding.checkHomem.isChecked.equals(false) && binding.checkMulher.isChecked.equals(false)){
             isValid = false
-            toast("verifique o campo nome!")
-        }
-        if (binding.edtEmail.text.toString().isNullOrEmpty()){
-            isValid = false
-            toast("verifique o campo email!")
-        }else{
-            if (!binding.edtEmail.text.toString().isValidEmail()){
-                isValid = false
-                toast("email invalido!")
-            }
+            toast("Escolha o gênero antes de continuar!")
         }
         if (binding.edtPassword.text.toString().isNullOrEmpty()){
             isValid = false
@@ -74,7 +78,6 @@ class RegisterFragment : Fragment() {
                 toast("minimo de caracteres 8 digitos!")
             }
         }
-
         return isValid
         }
 
@@ -82,23 +85,27 @@ class RegisterFragment : Fragment() {
         authViewModel.register.observe(viewLifecycleOwner){state->
             when(state){
                 UiState.Loading -> {
-                    binding.btnRegister.text = "Loading..."
-                    binding.progressRegister.show()
+                    binding.tvRegister.text = ""
+                    binding.registerProgress.show()
                 }
                 is UiState.Success -> {
-                    binding.btnRegister.text = "Register"
-                    binding.progressRegister.hide()
+                    binding.tvRegister.text = "Register"
+                    binding.registerProgress.hide()
                     toast(state.data)
+                    findNavController().navigate(
+                        R.id.action_registerFragment_to_geralActivity
+                    )
                 }
                 is UiState.Failure -> {
-                    binding.btnRegister.text = "Register"
-                    binding.progressRegister.hide()
+                    binding.tvRegister.text = "Register"
+                    binding.registerProgress.hide()
                     toast(state.error)
                 }
 
             }
         }
     }
+
 
 }
 

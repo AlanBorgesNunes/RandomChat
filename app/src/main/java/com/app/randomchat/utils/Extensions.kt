@@ -1,5 +1,6 @@
 package com.app.randomchat.utils
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.res.Resources
@@ -33,6 +34,10 @@ fun View.enabled(){
 
 fun Fragment.toast(msg: String?){
     Toast.makeText(requireContext(),msg,Toast.LENGTH_LONG).show()
+}
+
+fun Activity.toast(msg: String?){
+    Toast.makeText(this,msg,Toast.LENGTH_LONG).show()
 }
 
 fun Long.toPrettyDate(): String {

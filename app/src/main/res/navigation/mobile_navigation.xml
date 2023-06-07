@@ -11,8 +11,8 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_nav_home_to_chatFragment"
-            app:destination="@id/chatFragment" />
+            android:id="@+id/action_nav_home_to_chatActivity2"
+            app:destination="@id/chatActivity2" />
     </fragment>
 
     <fragment
@@ -20,10 +20,10 @@
         android:name="com.app.randomchat.ui.gallery.GalleryFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_gallery" />
-    <fragment
-        android:id="@+id/chatFragment"
-        android:name="com.app.randomchat.ui.ChatFragment"
-        android:label="ChatFragment"
-        tools:layout="@layout/fragment_chat"/>
+    <activity
+        android:id="@+id/chatActivity2"
+        android:name="com.app.randomchat.ChatActivity"
+        android:label="activity_chat"
+        tools:layout="@layout/activity_chat" />
 
 </navigation>

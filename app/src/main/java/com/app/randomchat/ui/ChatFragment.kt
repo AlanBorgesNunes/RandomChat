@@ -2,6 +2,7 @@ package com.app.randomchat.ui
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.app.randomchat.R
@@ -13,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ChatFragment : Fragment() {
     private lateinit var binding: FragmentChatBinding
     private val authViewModel: AuthViewModel by viewModels()
+    var args : String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -22,9 +24,9 @@ class ChatFragment : Fragment() {
         }
         setHasOptionsMenu(true)
 
-
         return binding.root
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.chat_menu,menu)

@@ -5,6 +5,7 @@ import android.view.*
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -50,8 +51,11 @@ class HomeFragment : Fragment() {
 
         val textView: TextView = binding.textHome
         textView.setOnClickListener {
+            val bundle = bundleOf(
+                "alan" to "Alan"
+            )
             findNavController().navigate(
-                R.id.action_nav_home_to_chatFragment
+                R.id.action_nav_home_to_chatActivity2
             )
         }
         homeViewModel.text.observe(viewLifecycleOwner) {

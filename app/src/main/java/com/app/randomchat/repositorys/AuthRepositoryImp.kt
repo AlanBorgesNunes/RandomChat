@@ -28,6 +28,7 @@ class AuthRepositoryImp(
         auth.createUserWithEmailAndPassword(email,password)
             .addOnCompleteListener {
                 if (it.isSuccessful){
+                    user.id = it.result.user?.uid
                     updateUserInfo(user){state ->
                         when(state){
                             UiState.Loading -> {}
@@ -35,13 +36,7 @@ class AuthRepositoryImp(
                                 result.invoke(UiState.Failure(state.error))
                             }
                             is UiState.Success -> {
-                               storeSession(id = it.result.user?.uid ?: ""){user->
-                                   if (user == null){
-                                      result.invoke(UiState.Failure("Useer register failed"))
-                                   }else{
-                                       result.invoke(UiState.Success("User register successfull"))
-                                   }
-                               }
+                                result.invoke(UiState.Success("User register successfull"))
                             }
                         }
                     }
@@ -63,7 +58,10 @@ class AuthRepositoryImp(
 
     override fun updateUserInfo(user: User, result: (UiState<String>) -> Unit) {
 
-        val document = database.collection(FireStoreCollection.USER).document(FirebaseAuth.getInstance().uid!!)
+        var childGenero = if (user.genero == "Homem"){"Homem"} else {"Mulher"}
+
+        val document = database.collection(FireStoreCollection.USER).document(childGenero)
+            .collection(FirebaseAuth.getInstance().uid!!).document("data")
         document
             .set(user)
             .addOnSuccessListener {
@@ -85,13 +83,7 @@ class AuthRepositoryImp(
         auth.signInWithEmailAndPassword(email,password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    storeSession(id = task.result.user?.uid ?: ""){
-                        if (it == null){
-                            result.invoke(UiState.Failure("Failed to store local session"))
-                        }else{
-                            result.invoke(UiState.Success("Login successfully!"))
-                        }
-                    }
+                    result.invoke(UiState.Success("Login successfully!"))
                 }
             }.addOnFailureListener {
                 result.invoke(UiState.Failure("Authentication failed, Check email and password"))

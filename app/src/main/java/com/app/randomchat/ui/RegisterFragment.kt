@@ -57,7 +57,7 @@ class RegisterFragment : Fragment() {
             nome = "Anonimo",
             email = binding.edtEmail.text.toString(),
             password = binding.edtPassword.text.toString(),
-            id = FirebaseAuth.getInstance().uid,
+            id = "",
             genero = genero,
             idade = "18"
         )

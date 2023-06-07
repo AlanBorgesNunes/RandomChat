@@ -14,6 +14,8 @@ import com.app.randomchat.R
 import com.app.randomchat.databinding.FragmentHomeBinding
 import com.app.randomchat.viewmodels.AuthViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -45,8 +47,7 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            val db = FirebaseFirestore.getInstance()
         }
 
         val textView: TextView = binding.textHome
